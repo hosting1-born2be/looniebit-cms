@@ -1,0 +1,73 @@
+import type { CollectionConfig } from 'payload'
+import slugify from 'slugify'
+
+export const Policies: CollectionConfig = {
+  slug: 'policies',
+  admin: {
+    useAsTitle: 'title',
+  },
+  access: {
+    read: () => true,
+    create: () => true,
+    update: () => true,
+    delete: () => true,
+  },
+  fields: [
+    {
+      name: 'title',
+      type: 'text',
+      label: 'Policy Title',
+      required: true,
+    },
+    {
+      name: 'slug',
+      type: 'text',
+      label: 'Slug',
+      unique: true,
+      hooks: {
+        beforeChange: [
+          async ({ data }) => {
+            if (data?.title) {
+              return slugify(data.title, { lower: true, strict: true })
+            }
+          },
+        ],
+      },
+    },
+    {
+      name: 'last_updated',
+      type: 'date',
+      label: 'Last Updated',
+    },
+    {
+      name: 'content',
+      type: 'richText',
+      label: 'Content',
+    },
+  ],
+  hooks: {
+    afterChange: [
+      async ({ doc }) => {
+        try {
+          const response = await fetch('https://looniebit.com/api/revalidate', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              tags: ['insights'],
+            }),
+          })
+
+          if (!response.ok) {
+            console.error('Cache revalidation failed:', response.statusText)
+          } else {
+            console.log('Cache revalidation triggered successfully.')
+          }
+        } catch (error) {
+          console.error('Error triggering cache revalidation:', error)
+        }
+      },
+    ],
+  },
+}
