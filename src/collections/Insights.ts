@@ -44,11 +44,6 @@ export const Insights: CollectionConfig = {
       },
     },
     {
-      name: 'excerpt',
-      type: 'text',
-      label: 'Excerpt',
-    },
-    {
       name: 'excerpt_inner',
       type: 'text',
       label: 'Excerpt for Inner Page',

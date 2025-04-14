@@ -160,7 +160,6 @@ export interface Insight {
   title: string;
   slug?: string | null;
   image?: (number | null) | Media;
-  excerpt?: string | null;
   excerpt_inner?: string | null;
   content?: {
     root: {
@@ -284,7 +283,6 @@ export interface InsightsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   image?: T;
-  excerpt?: T;
   excerpt_inner?: T;
   content?: T;
   seo_title?: T;
