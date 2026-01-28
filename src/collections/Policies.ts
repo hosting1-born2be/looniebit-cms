@@ -24,15 +24,7 @@ export const Policies: CollectionConfig = {
       type: 'text',
       label: 'Slug',
       unique: true,
-      hooks: {
-        beforeChange: [
-          async ({ data }) => {
-            if (data?.title) {
-              return slugify(data.title, { lower: true, strict: true })
-            }
-          },
-        ],
-      },
+      
     },
     {
       name: 'last_updated',
